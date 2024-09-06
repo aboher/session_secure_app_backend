@@ -4,6 +4,7 @@ import com.aboher.inventory.exception.InvalidFormFieldException;
 import com.aboher.inventory.exception.UserValueAlreadyInUseException;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
+import com.aboher.inventory.util.impl.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

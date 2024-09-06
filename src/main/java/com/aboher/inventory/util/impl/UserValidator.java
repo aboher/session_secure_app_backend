@@ -1,9 +1,10 @@
-package com.aboher.inventory.util;
+package com.aboher.inventory.util.impl;
 
 import com.aboher.inventory.exception.InvalidFormFieldException;
 import com.aboher.inventory.exception.UserValueAlreadyInUseException;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
+import com.aboher.inventory.util.EntityValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

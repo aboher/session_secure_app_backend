@@ -1,4 +1,4 @@
-package com.aboher.inventory.service;
+package com.aboher.inventory.service.impl;
 
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;

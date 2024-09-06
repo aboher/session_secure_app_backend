@@ -1,8 +1,9 @@
 package com.aboher.inventory.controller;
 
 import com.aboher.inventory.dto.UserDto;
+import com.aboher.inventory.mapper.Mapper;
 import com.aboher.inventory.model.User;
-import com.aboher.inventory.service.UserService;
+import com.aboher.inventory.service.impl.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,7 +32,7 @@ class UserControllerTest {
     private UserService userService;
 
     @Mock
-    private ModelMapper modelMapper;
+    private Mapper<User, UserDto> userDtoMapper;
 
     @InjectMocks
     private UserController userController;
@@ -60,12 +59,12 @@ class UserControllerTest {
                 .firstName("firstName")
                 .lastName("lastName")
                 .email("username@mail.com")
-                .password("$2a$10$5pr1l69exFk8YmqtyR4k0ud9BLaBJO.7QKgy8SRLgfAEerxeh604K").build();
+                .password(null).build();
 
         // When
-        when(modelMapper.map(any(UserDto.class), eq(User.class))).thenReturn(mockUser);
+        when(userDtoMapper.toEntity(any(UserDto.class))).thenReturn(mockUser);
         when(userService.createUser(any(User.class))).thenReturn(mockUser);
-        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(mockReturnedUserDto);
+        when(userDtoMapper.toDto(any(User.class))).thenReturn(mockReturnedUserDto);
 
         // Then
         mockMvc.perform(post("/user")

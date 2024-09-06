@@ -1,28 +1,33 @@
 package com.aboher.inventory.controller;
 
 import com.aboher.inventory.dto.UserDto;
+import com.aboher.inventory.mapper.Mapper;
 import com.aboher.inventory.model.User;
-import com.aboher.inventory.service.UserService;
+import com.aboher.inventory.service.impl.UserService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final ModelMapper modelMapper;
+    private final Mapper<User, UserDto> userDtoMapper;
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping
+    public String helloUser() {
+        return "Hello user";
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody UserDto newUserDto) {
-        User newUser = modelMapper.map(newUserDto, User.class);
+        User newUser = userDtoMapper.toEntity(newUserDto);
         User createdUser = userService.createUser(newUser);
-        UserDto createdUserDto = modelMapper.map(createdUser, UserDto.class);
-        createdUserDto.setPassword(null);
-        return createdUserDto;
+        return userDtoMapper.toDto(createdUser);
     }
 }

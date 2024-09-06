@@ -2,6 +2,7 @@ package com.aboher.inventory.service;
 
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
+import com.aboher.inventory.service.impl.UserService;
 import com.aboher.inventory.util.EntityValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
