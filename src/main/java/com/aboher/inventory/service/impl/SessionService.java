@@ -1,9 +1,17 @@
 package com.aboher.inventory.service.impl;
 
+import com.aboher.inventory.exception.InvalidSessionException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,5 +25,28 @@ public class SessionService {
             oldSession.invalidate();
         }
         return request.getSession(true);
+    }
+
+    public Date getSessionExpirationDate() throws InvalidSessionException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            int maxInactiveInterval = session.getMaxInactiveInterval();
+            long expirationTime = session.getLastAccessedTime() + (maxInactiveInterval * 1000L);
+            return new Date(expirationTime);
+        }
+        throw new InvalidSessionException("Session doesn't exist");
+    }
+
+    public String getUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    public List<String> getRoles() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
     }
 }
