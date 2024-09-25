@@ -1,5 +1,6 @@
 package com.aboher.inventory.service.impl;
 
+import com.aboher.inventory.enums.Role;
 import com.aboher.inventory.exception.InvalidSessionException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,16 +39,16 @@ public class SessionService {
         throw new InvalidSessionException("Session doesn't exist");
     }
 
-    public String getUsername() {
+    public String getEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
 
-    public List<String> getRoles() {
+    public Set<Role> getRoles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
+                .map(authority -> Role.valueOf(authority.getAuthority()))
+                .collect(Collectors.toSet());
     }
 }

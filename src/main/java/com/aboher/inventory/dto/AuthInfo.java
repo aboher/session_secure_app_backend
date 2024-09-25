@@ -1,9 +1,11 @@
 package com.aboher.inventory.dto;
 
-import java.util.Date;
-import java.util.List;
+import com.aboher.inventory.enums.Role;
 
-public record AuthInfo(String username,
-                       List<String> roles,
+import java.util.Date;
+import java.util.Set;
+
+public record AuthInfo(String email,
+                       Set<Role> roles,
                        Date expirationDate) {
 }

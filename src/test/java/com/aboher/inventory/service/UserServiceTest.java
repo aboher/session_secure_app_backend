@@ -1,6 +1,8 @@
 package com.aboher.inventory.service;
 
+import com.aboher.inventory.enums.Role;
 import com.aboher.inventory.model.User;
+import com.aboher.inventory.model.UserInfo;
 import com.aboher.inventory.repository.UserRepository;
 import com.aboher.inventory.service.impl.UserService;
 import com.aboher.inventory.util.EntityValidator;
@@ -10,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,11 +39,10 @@ public class UserServiceTest {
     public void givenValidUser_whenCreateUser_thenReturnUserWithDefaultFields() {
         // Given
         User validUser = User.builder()
-                .username("username")
-                .firstName("firstName")
-                .lastName("lastName")
+                .userInfo(new UserInfo("firstName", "lastName"))
                 .email("user@mail.com")
-                .password("sfRG$%34sd3lf").build();
+                .password("sfRG$%34sd3lf")
+                .roles(new HashSet<>()).build();
 
         String expectedEncodedPassword = "encoded_password";
 
@@ -55,7 +58,6 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(any(User.class));
         assertThat(createdUser.getPassword()).isEqualTo(expectedEncodedPassword);
         assertThat(createdUser.isEnabled()).isTrue();
-        assertThat(createdUser.getAuthority()).isEqualTo("ROLE_USER");
-        assertThat(createdUser.isEmailValidated()).isFalse();
+        assertThat(createdUser.getRoles().contains(Role.ROLE_USER)).isTrue();
     }
 }

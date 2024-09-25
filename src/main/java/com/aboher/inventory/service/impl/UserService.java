@@ -1,5 +1,6 @@
 package com.aboher.inventory.service.impl;
 
+import com.aboher.inventory.enums.Role;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
 import com.aboher.inventory.util.EntityValidator;
@@ -28,8 +29,6 @@ public class UserService {
 
     private void setRemainingFieldsWithDefaultValues(User user) {
         user.setEnabled(true);
-        user.setAuthority("ROLE_USER");
-        user.setEmailValidated(false);
+        user.getRoles().add(Role.ROLE_USER);
     }
-
 }

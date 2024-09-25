@@ -48,17 +48,15 @@ class UserControllerTest {
     void givenValidUserDto_whenCreateUser_thenReturnCreatedUserWithoutPassword() throws Exception {
         // Given
         String newUserDtoJson = objectMapper.writeValueAsString(UserDto.builder()
-                .username("username")
                 .firstName("firstName")
                 .lastName("lastName")
-                .email("username@mail.com")
+                .email("email@mail.com")
                 .password("dfdFE%$543DFG").build());
         User mockUser = new User();
         UserDto mockReturnedUserDto = UserDto.builder()
-                .username("username")
                 .firstName("firstName")
                 .lastName("lastName")
-                .email("username@mail.com")
+                .email("email@mail.com")
                 .password(null).build();
 
         // When
@@ -67,11 +65,10 @@ class UserControllerTest {
         when(userDtoMapper.toDto(any(User.class))).thenReturn(mockReturnedUserDto);
 
         // Then
-        mockMvc.perform(post("/user")
+        mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newUserDtoJson))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username", is(mockReturnedUserDto.getUsername())))
                 .andExpect(jsonPath("$.firstName", is(mockReturnedUserDto.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(mockReturnedUserDto.getLastName())))
                 .andExpect(jsonPath("$.email", is(mockReturnedUserDto.getEmail())))

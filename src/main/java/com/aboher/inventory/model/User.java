@@ -1,28 +1,44 @@
 package com.aboher.inventory.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.aboher.inventory.enums.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
-    private String username;
-    private String firstName;
-    private String lastName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", length = 500, nullable = false)
     private String password;
+
+    @Column(name = "enabled", nullable = false)
     private boolean enabled;
-    private String authority;
-    private boolean emailValidated;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type", nullable = false)
+    private Set<Role> roles;
+
+    @Embedded
+    private UserInfo userInfo;
 }

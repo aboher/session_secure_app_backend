@@ -2,6 +2,7 @@ package com.aboher.inventory.controller;
 
 import com.aboher.inventory.dto.AuthInfo;
 import com.aboher.inventory.dto.LoginRequest;
+import com.aboher.inventory.enums.Role;
 import com.aboher.inventory.service.AuthService;
 import com.aboher.inventory.service.impl.SessionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,7 +35,7 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
         Authentication authenticationRequest =
                 UsernamePasswordAuthenticationToken.unauthenticated(
-                        loginRequest.username(),
+                        loginRequest.email(),
                         loginRequest.password());
         try {
             usernamePasswordAuthService.authenticate(authenticationRequest);
@@ -58,9 +59,9 @@ public class AuthController {
 
     @GetMapping("/auth-info")
     public AuthInfo authorizationInfo() {
-        String username = sessionService.getUsername();
-        List<String> roles = sessionService.getRoles();
+        String email = sessionService.getEmail();
+        Set<Role> roles = sessionService.getRoles();
         Date expirationDate = sessionService.getSessionExpirationDate();
-        return new AuthInfo(username, roles, expirationDate);
+        return new AuthInfo(email, roles, expirationDate);
     }
 }
