@@ -46,9 +46,9 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
         userDetailsManager.setUsersByUsernameQuery(
-                "SELECT email, password, enabled FROM users WHERE email = ?");
+                "SELECT email, password, enabled FROM user WHERE email = ?");
         userDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT users.email, user_role.role_type FROM users INNER JOIN user_role ON users.id=user_role.user_id WHERE users.email = ?");
+                "SELECT user.email, user_role.role_type FROM user INNER JOIN user_role ON user.id=user_role.user_id WHERE user.email = ?");
         return userDetailsManager;
     }
 
@@ -74,9 +74,13 @@ public class SecurityConfig {
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/logout").permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/users",
+                                "/login",
+                                "/logout",
+                                "/users/confirm-account"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout
                         .logoutUrl("/logout")

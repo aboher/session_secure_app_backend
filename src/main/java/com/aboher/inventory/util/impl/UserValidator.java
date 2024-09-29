@@ -1,7 +1,6 @@
 package com.aboher.inventory.util.impl;
 
 import com.aboher.inventory.exception.InvalidFormFieldException;
-import com.aboher.inventory.exception.UserValueAlreadyInUseException;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
 import com.aboher.inventory.util.EntityValidator;
@@ -26,20 +25,11 @@ public class UserValidator implements EntityValidator<User> {
 
     @Override
     public void validate(User user) {
-        checkEmailIsAvailable(user.getEmail());
         checkFirstAndLastnameValidity(
                 user.getUserInfo().getFirstName(),
                 user.getUserInfo().getLastName());
         checkEmailValidity(user.getEmail());
         checkPasswordValidity(user.getPassword());
-    }
-
-    private void checkEmailIsAvailable(String email) {
-        if (userRepository.existsByEmail(email)) {
-            throw new UserValueAlreadyInUseException(String.format(
-                    "Email '%s' already in use. Please choose another email",
-                    email));
-        }
     }
 
     private void checkPasswordValidity(String password) {

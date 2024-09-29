@@ -1,7 +1,6 @@
 package com.aboher.inventory.util;
 
 import com.aboher.inventory.exception.InvalidFormFieldException;
-import com.aboher.inventory.exception.UserValueAlreadyInUseException;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.model.UserInfo;
 import com.aboher.inventory.repository.UserRepository;
@@ -44,22 +43,6 @@ class UserValidatorTest {
 
         // Then
         userValidator.validate(validUser);
-        verify(userRepository, times(1)).existsByEmail(validUser.getEmail());
-    }
-
-    @Test
-    void givenEmailIsTaken_whenValidate_thenThrowUserValueAlreadyInUseException() {
-        // Given the valid user, but with email taken
-
-        // When
-        when(userRepository.existsByEmail(validUser.getEmail())).thenReturn(true);
-
-
-        // Then
-        assertThatThrownBy(() -> userValidator.validate(validUser))
-                .isInstanceOf(UserValueAlreadyInUseException.class)
-                .hasMessageContaining(String.format("Email '%s' already in use. " +
-                        "Please choose another email", validUser.getEmail()));
         verify(userRepository, times(1)).existsByEmail(validUser.getEmail());
     }
 

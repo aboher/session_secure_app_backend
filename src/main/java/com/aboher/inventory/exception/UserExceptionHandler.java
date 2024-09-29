@@ -13,16 +13,16 @@ import java.util.Map;
 public class UserExceptionHandler {
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(UserValueAlreadyInUseException.class)
-    public Map<String, String> handleUserValueAlreadyInUseException(UserValueAlreadyInUseException ex) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidFormFieldException.class)
+    public Map<String, String> handleInvalidValueException(RuntimeException ex) {
         return getErrorMapFromErrorMessage(ex.getMessage());
     }
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidFormFieldException.class)
-    public Map<String, String> handleInvalidValueException(RuntimeException ex) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidTokenException.class)
+    public Map<String, String> handleInvalidTokenException(RuntimeException ex) {
         return getErrorMapFromErrorMessage(ex.getMessage());
     }
 
