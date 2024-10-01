@@ -14,8 +14,8 @@ public class ConfirmationTokenService {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
-    public ConfirmationToken createToken(User user, TokenType tokenType) {
-        ConfirmationToken token = new ConfirmationToken(user, TokenType.EMAIL_CONFIRMATION_TOKEN);
+    public ConfirmationToken createToken(User user, TokenType tokenType, int expirationTimePeriodInMinutes) {
+        ConfirmationToken token = new ConfirmationToken(user, tokenType, expirationTimePeriodInMinutes);
         return confirmationTokenRepository.save(token);
     }
 
@@ -38,8 +38,8 @@ public class ConfirmationTokenService {
         confirmationTokenRepository.delete(confirmationToken);
     }
 
-    public void deleteUserConfirmationTokenIfExist(User user, TokenType tokenType) {
-        ConfirmationToken token = confirmationTokenRepository.findByUserAndTokenType(user, TokenType.EMAIL_CONFIRMATION_TOKEN);
+    public void deleteUserConfirmationTokenIfExists(User user, TokenType tokenType) {
+        ConfirmationToken token = confirmationTokenRepository.findByUserAndTokenType(user, tokenType);
         if (token != null) {
             confirmationTokenRepository.delete(token);
         }

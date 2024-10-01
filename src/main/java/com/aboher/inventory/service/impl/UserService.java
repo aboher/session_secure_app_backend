@@ -1,7 +1,6 @@
 package com.aboher.inventory.service.impl;
 
 import com.aboher.inventory.enums.Role;
-import com.aboher.inventory.enums.TokenType;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
 import com.aboher.inventory.util.EntityValidator;
@@ -15,11 +14,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ConfirmationTokenService confirmationTokenService;
     private final PasswordEncoder passwordEncoder;
     private final EntityValidator<User> userValidator;
-    private final EmailConfirmationService emailConfirmationService;
     private final EmailService emailService;
+    private final EmailConfirmationService emailConfirmationService;
+    private final PasswordChangeService passwordChangeService;
 
     public User createUser(User user) {
         userValidator.validate(user);
@@ -31,7 +30,7 @@ public class UserService {
             notifyUserHeAlreadyHasAnAccount(user);
             return user;
         }
-        confirmationTokenService.deleteUserConfirmationTokenIfExist(savedUser, TokenType.EMAIL_CONFIRMATION_TOKEN);
+        emailConfirmationService.deleteUserConfirmationTokenIfExists(savedUser);
         user.setId(savedUser.getId());
              /*Here, at this point, I'm replacing the unverified user in the database
              with the new one. I do this because someone may have used this email by
@@ -68,5 +67,52 @@ public class UserService {
 
     private void encodePassword(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+
+    public void requestPasswordChange(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return;
+        }
+        if (!user.isEnabled()) {
+            notifyUserHeDoNotHaveAnAccount(user);
+            return;
+        }
+        passwordChangeService.deleteUserConfirmationTokenIfExists(user);
+        passwordChangeService.sendEmailWithConfirmationToken(user);
+    }
+
+    private void notifyUserHeDoNotHaveAnAccount(User user) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setSubject("Account required");
+        mail.setText("""
+                Your don't have an account created with this email.
+                You have to create an account and confirm your email before being able to change your password.
+                                
+                If it wasn't you trying to change your password, just ignore this email.""");
+        emailService.sendEmail(mail);
+    }
+
+    public void validateTokenAndEnableUser(String confirmationToken) {
+        User user = emailConfirmationService.validateTokenAndReturnCorrespondingUser(confirmationToken);
+        enableUser(user);
+    }
+
+    public void enableUser(User user) {
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+    public void changeUserPassword(User user, String newPassword) {
+        user.setPassword(newPassword);
+        userValidator.validate(user);
+        encodePassword(user);
+        userRepository.save(user);
+    }
+
+    public void validateTokenAndChangePassword(String token, String newPassword) {
+        User user = passwordChangeService.validateTokenAndReturnCorrespondingUser(token);
+        changeUserPassword(user, newPassword);
     }
 }

@@ -79,7 +79,9 @@ public class SecurityConfig {
                                 "/users",
                                 "/login",
                                 "/logout",
-                                "/users/confirm-account"
+                                "/users/confirm-account",
+                                "/users/request-password-change",
+                                "/users/password-change"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout

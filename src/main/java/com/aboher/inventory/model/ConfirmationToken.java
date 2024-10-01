@@ -16,7 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConfirmationToken {
-    private static final int EXPIRATION_TIME_PERIOD_IN_HOURS = 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,17 +36,17 @@ public class ConfirmationToken {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    public ConfirmationToken(User user, TokenType tokenType) {
+    public ConfirmationToken(User user, TokenType tokenType, int expirationTimePeriodInMinutes) {
         this.user = user;
-        this.expiryDate = calculateExpiryDate();
+        this.expiryDate = calculateExpiryDate(expirationTimePeriodInMinutes);
         this.token = UUID.randomUUID().toString();
         this.tokenType = tokenType;
     }
 
-    private Date calculateExpiryDate() {
+    private Date calculateExpiryDate(int expirationTimePeriodInMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR, EXPIRATION_TIME_PERIOD_IN_HOURS);
+        calendar.add(Calendar.MINUTE, expirationTimePeriodInMinutes);
         return calendar.getTime();
     }
 

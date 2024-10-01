@@ -3,7 +3,6 @@ package com.aboher.inventory.controller;
 import com.aboher.inventory.dto.UserDto;
 import com.aboher.inventory.mapper.Mapper;
 import com.aboher.inventory.model.User;
-import com.aboher.inventory.service.impl.EmailConfirmationService;
 import com.aboher.inventory.service.impl.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ public class UserController {
 
     private final UserService userService;
     private final Mapper<User, UserDto> userDtoMapper;
-    private final EmailConfirmationService emailConfirmationService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -28,6 +26,17 @@ public class UserController {
 
     @PostMapping("/confirm-account")
     public void confirmUserAccount(@RequestParam("token") String confirmationToken) {
-        emailConfirmationService.validateToken(confirmationToken);
+        userService.validateTokenAndEnableUser(confirmationToken);
+    }
+
+    @PostMapping("/request-password-change")
+    public void requestPasswordChange(@RequestParam("email") String email) {
+        userService.requestPasswordChange(email);
+    }
+
+    @PostMapping("/password-change")
+    public void changePassword(@RequestParam("token") String token, @RequestBody UserDto userDto) {
+        User user = userDtoMapper.toEntity(userDto);
+        userService.validateTokenAndChangePassword(token, user.getPassword());
     }
 }
