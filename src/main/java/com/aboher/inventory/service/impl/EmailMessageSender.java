@@ -1,5 +1,6 @@
 package com.aboher.inventory.service.impl;
 
+import com.aboher.inventory.service.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -8,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailMessageSender implements MessageSender<SimpleMailMessage> {
 
     private final JavaMailSender javaMailSender;
 
+    @Override
     @Async
-    public void sendEmail(SimpleMailMessage email) {
-        javaMailSender.send(email);
+    public void sendMessage(SimpleMailMessage message) {
+        javaMailSender.send(message);
     }
 }
