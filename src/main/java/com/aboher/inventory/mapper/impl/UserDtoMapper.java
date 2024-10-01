@@ -8,8 +8,6 @@ import lombok.Builder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-
 @Builder
 @Component
 public class UserDtoMapper implements Mapper<User, UserDto> {
@@ -29,7 +27,6 @@ public class UserDtoMapper implements Mapper<User, UserDto> {
     public User toEntity(UserDto dto) {
         User user = modelMapper.map(dto, User.class);
         user.setUserInfo(new UserInfo(dto.getFirstName(), dto.getLastName()));
-        user.setRoles(new HashSet<>());
         return user;
     }
 }

@@ -12,7 +12,7 @@ CREATE TABLE user (
 
 CREATE TABLE user_role (
     user_id BIGINT NOT NULL,
-    role_type ENUM('ROLE_USER', 'ROLE_ADMIN'),
+    role_type ENUM('ROLE_USER', 'ROLE_MODERATOR', 'ROLE_ADMIN'),
     PRIMARY KEY (user_id, role_type),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -1,6 +1,6 @@
 package com.aboher.inventory.service.impl;
 
-import com.aboher.inventory.enums.Role;
+import com.aboher.inventory.config.FrontendProperties;
 import com.aboher.inventory.model.User;
 import com.aboher.inventory.repository.UserRepository;
 import com.aboher.inventory.service.MessageSender;
@@ -21,6 +21,7 @@ public class UserService {
     private final MessageSender<SimpleMailMessage> emailMessageSender;
     private final TokenBasedVerificationService emailAccountConfirmationService;
     private final TokenBasedVerificationService passwordChangeThroughEmailService;
+    private final FrontendProperties frontendProperties;
 
     public User createUser(User user) {
         userValidator.validate(user);
@@ -55,17 +56,19 @@ public class UserService {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setSubject("Account already validated");
-        mail.setText("""
-                Your account is already validated.
-                If you don't remember your password, please click the "I forgot my password" link in the Sign In page.
-                                
-                If it wasn't you trying to create an account, just ignore this email.""");
+        mail.setText(String.format("""
+                        Your account is already validated.
+                        If you don't remember your password, please click the "I forgot my password" link in the Sign In page.
+                        Or click here: %s%s
+                                        
+                        If it wasn't you trying to create an account, just ignore this email.""",
+                frontendProperties.getUrl(),
+                frontendProperties.getRequestPasswordChangePath()));
         emailMessageSender.sendMessage(mail);
     }
 
     private User saveNewUserInDatabase(User user) {
         encodePassword(user);
-        user.getRoles().add(Role.ROLE_USER);
         user.setEnabled(false);
         User savedUser = userRepository.save(user);
         emailAccountConfirmationService.sendMessageWithConfirmationToken(savedUser);
