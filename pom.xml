@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.aboher</groupId>
-	<artifactId>inventory</artifactId>
+	<artifactId>session-secure-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>inventory</name>
-	<description>Inventory project</description>
+	<name>session-secure-app</name>
+	<description>Session secured app using Spring Boot, Spring Security and Spring Session</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
