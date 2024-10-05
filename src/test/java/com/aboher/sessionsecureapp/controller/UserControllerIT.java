@@ -138,7 +138,7 @@ class UserControllerIT {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is(String.format(
                         "Invalid first name '%s'. First name can not have digits, " +
-                                "and must be between 1 and 24 characters long",
+                        "and must be between 1 and 24 characters long",
                         invalidUserDto.getFirstName()))));
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, never()).save(any(User.class));
@@ -165,7 +165,7 @@ class UserControllerIT {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is(String.format(
                         "Invalid last name '%s'. Last name can not have digits, " +
-                                "and must be between 1 and 24 characters long",
+                        "and must be between 1 and 24 characters long",
                         invalidUserDto.getLastName()))));
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, never()).save(any(User.class));
@@ -217,9 +217,9 @@ class UserControllerIT {
                         .content(newUserDtoJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is("Invalid password. Valid " +
-                        "password must have between 8 to 24 characters. Must include " +
-                        "uppercase and lowercase letters, a number and a special " +
-                        "character. Allowed special Characters: !@#$%")));
+                                                         "password must have between 8 to 24 characters. Must include " +
+                                                         "uppercase and lowercase letters, a number and a special " +
+                                                         "character. Allowed special Characters: !@#$%")));
         verify(userRepository, times(1)).existsByEmail(anyString());
         verify(userRepository, never()).save(any(User.class));
     }

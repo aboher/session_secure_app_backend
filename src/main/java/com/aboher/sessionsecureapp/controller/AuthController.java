@@ -2,7 +2,6 @@ package com.aboher.sessionsecureapp.controller;
 
 import com.aboher.sessionsecureapp.dto.AuthInfo;
 import com.aboher.sessionsecureapp.dto.LoginRequest;
-import com.aboher.sessionsecureapp.enums.Role;
 import com.aboher.sessionsecureapp.service.AuthService;
 import com.aboher.sessionsecureapp.service.impl.SessionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -59,9 +56,10 @@ public class AuthController {
 
     @GetMapping("/auth-info")
     public AuthInfo authorizationInfo() {
-        String email = sessionService.getEmail();
-        Set<Role> roles = sessionService.getRoles();
-        Date expirationDate = sessionService.getSessionExpirationDate();
-        return new AuthInfo(email, roles, expirationDate);
+        return AuthInfo.builder()
+                .email(sessionService.getEmail())
+                .roles(sessionService.getRoles())
+                .expirationDate(sessionService.getExpirationDate())
+                .build();
     }
 }

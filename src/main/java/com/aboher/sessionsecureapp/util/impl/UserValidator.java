@@ -35,9 +35,9 @@ public class UserValidator implements EntityValidator<User> {
     private void checkPasswordValidity(String password) {
         if (!passwordPattern.matcher(password).matches()) {
             throw new InvalidFormFieldException("Invalid password. Valid password " +
-                    "must have between 8 to 24 characters. Must include uppercase " +
-                    "and lowercase letters, a number and a special character. Allowed " +
-                    "special Characters: !@#$%");
+                                                "must have between 8 to 24 characters. Must include uppercase " +
+                                                "and lowercase letters, a number and a special character. Allowed " +
+                                                "special Characters: !@#$%");
         }
     }
 
@@ -52,12 +52,12 @@ public class UserValidator implements EntityValidator<User> {
         if (!namesPattern.matcher(firstName).matches()) {
             throw new InvalidFormFieldException(String.format(
                     "Invalid first name '%s'. First name can not have digits, " +
-                            "and must be between 1 and 24 characters long", firstName));
+                    "and must be between 1 and 24 characters long", firstName));
         }
         if (!namesPattern.matcher(lastName).matches()) {
             throw new InvalidFormFieldException(String.format(
                     "Invalid last name '%s'. Last name can not have digits, " +
-                            "and must be between 1 and 24 characters long", lastName));
+                    "and must be between 1 and 24 characters long", lastName));
         }
     }
 }

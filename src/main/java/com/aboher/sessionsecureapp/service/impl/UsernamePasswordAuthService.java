@@ -21,10 +21,11 @@ public class UsernamePasswordAuthService implements AuthService {
     public void authenticate(Authentication authenticationRequest) throws BadCredentialsException {
         Authentication authenticationResponse =
                 authenticationManager.authenticate(authenticationRequest);
-        HttpSession newSession = sessionService.createNewSession();
+        HttpSession newSession = sessionService.invalidateOldSessionAndCreateNewOne();
         SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
         newSession.setAttribute(
                 HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                 SecurityContextHolder.getContext());
+        sessionService.storeSessionDetailsInAttributes();
     }
 }
