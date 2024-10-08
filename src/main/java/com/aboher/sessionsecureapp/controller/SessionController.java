@@ -53,4 +53,9 @@ public class SessionController {
     public Set<String> getAllActiveSessionsIds(Principal principal) {
         return sessionService.getAllActiveSessionsIds(principal);
     }
+
+    @DeleteMapping("delete-session")
+    public void deleteSession(@RequestParam String id) {
+        sessionService.invalidateSession(id);
+    }
 }

@@ -38,6 +38,10 @@ public class SessionService {
         return request.getSession(true);
     }
 
+    public void invalidateSession(String id) {
+        sessionRepository.deleteById(id);
+    }
+
     public Date getExpirationDate() {
         int maxInactiveInterval = httpSession.getMaxInactiveInterval();
         long expirationTime = httpSession.getLastAccessedTime() + (maxInactiveInterval * 1000L);
