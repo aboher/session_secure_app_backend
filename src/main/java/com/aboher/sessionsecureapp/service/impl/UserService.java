@@ -101,7 +101,7 @@ public class UserService {
         mail.setTo(user.getEmail());
         mail.setSubject("Account required");
         mail.setText("""
-                Your don't have an account created with this email.
+                You don't have an account created with this email.
                 You have to create an account and confirm your email before being able to change your password.
                                 
                 If it wasn't you trying to change your password, just ignore this email.""");
