@@ -17,7 +17,7 @@ public class SessionController {
     private final SessionService sessionService;
 
     @GetMapping("info")
-    public SessionInfo getSessionInfo(@RequestParam String id) {
+    public SessionInfo getSessionInfo(@RequestParam(defaultValue = "current-session") String id) {
         if ("current-session".equals(id)) {
             return sessionService.getSessionInfo();
         }
