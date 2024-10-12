@@ -3,6 +3,7 @@ package com.aboher.sessionsecureapp.controller;
 import com.aboher.sessionsecureapp.dto.SessionInfo;
 import com.aboher.sessionsecureapp.service.impl.SessionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -57,5 +58,17 @@ public class SessionController {
     @DeleteMapping("delete-session")
     public void deleteSession(@RequestParam String id) {
         sessionService.invalidateSession(id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("emails-of-all-active-sessions")
+    public Set<String> getAllActiveSessionsPrincipalNames() {
+        return sessionService.getAllActiveSessionsPrincipalNames();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("active-sessions-ids/{principalName}")
+    public Set<String> getAllActiveSessionsIds(@PathVariable String principalName) {
+        return sessionService.getAllActiveSessionsIds(principalName);
     }
 }
