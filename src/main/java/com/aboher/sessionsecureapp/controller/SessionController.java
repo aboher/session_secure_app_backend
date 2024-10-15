@@ -1,6 +1,7 @@
 package com.aboher.sessionsecureapp.controller;
 
 import com.aboher.sessionsecureapp.dto.SessionInfo;
+import com.aboher.sessionsecureapp.exception.InvalidAttributeException;
 import com.aboher.sessionsecureapp.service.impl.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,11 +43,19 @@ public class SessionController {
 
     @PutMapping("attribute")
     public void setAttribute(@RequestParam String name, @RequestBody Object object) {
+        if ("SESSION_DETAILS".equals(name) || "SPRING_SECURITY_CONTEXT".equals(name)) {
+            throw new InvalidAttributeException(
+                    String.format("You are not allowed to modify '%s' attribute", name));
+        }
         sessionService.setAttribute(name, object);
     }
 
     @DeleteMapping("attribute")
     public void deleteAttribute(@RequestParam String name) {
+        if ("SESSION_DETAILS".equals(name) || "SPRING_SECURITY_CONTEXT".equals(name)) {
+            throw new InvalidAttributeException(
+                    String.format("You are not allowed to delete '%s' attribute", name));
+        }
         sessionService.removeAttribute(name);
     }
 

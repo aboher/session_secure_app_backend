@@ -14,7 +14,7 @@ public class UserExceptionHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidFormFieldException.class, InvalidSessionException.class})
+    @ExceptionHandler({InvalidFormFieldException.class, InvalidSessionException.class, InvalidAttributeException.class})
     public Map<String, String> handleInvalidValueException(RuntimeException ex) {
         return getErrorMapFromErrorMessage(ex.getMessage());
     }

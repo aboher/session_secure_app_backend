@@ -2,6 +2,7 @@ package com.aboher.sessionsecureapp.service.impl;
 
 import com.aboher.sessionsecureapp.dto.SessionInfo;
 import com.aboher.sessionsecureapp.enums.Role;
+import com.aboher.sessionsecureapp.exception.InvalidAttributeException;
 import com.aboher.sessionsecureapp.exception.InvalidSessionException;
 import com.aboher.sessionsecureapp.model.SessionDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -100,7 +101,12 @@ public class SessionService {
     }
 
     public Object getAttribute(String name) {
-        return httpSession.getAttribute(name);
+        Object attribute = httpSession.getAttribute(name);
+        if (attribute == null) {
+            throw new InvalidAttributeException(
+                    String.format("Attribute '%s' does not exist", name));
+        }
+        return attribute;
     }
 
     public void setAttribute(String name, Object value) {
