@@ -11,9 +11,9 @@ import lombok.Data;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
-@Service
 @Data
-public class PasswordChangeThroughEmailService implements TokenBasedVerificationService {
+@Service
+public class AccountDeletionThroughEmailService implements TokenBasedVerificationService {
     private final int EXPIRATION_TIME_PERIOD_IN_MINUTES = 10;
     private final FrontendProperties frontendProperties;
     private final ConfirmationTokenService confirmationTokenService;
@@ -22,19 +22,20 @@ public class PasswordChangeThroughEmailService implements TokenBasedVerification
     @Override
     public void sendMessageWithConfirmationToken(User user) {
         ConfirmationToken token = confirmationTokenService.createToken(user,
-                TokenType.PASSWORD_CHANGE_TOKEN,
+                TokenType.ACCOUNT_DELETION_TOKEN,
                 EXPIRATION_TIME_PERIOD_IN_MINUTES);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Password Change Request");
+        mailMessage.setSubject("Account Deletion request");
         mailMessage.setText(String.format("""
-                        You have requested to change your password, please click here to continue:
+                        You have requested to delete your account. Be aware that this process is irreversible,
+                        if you really wish to delete your account, please click here to continue:
                         %s%s?token=%s
 
                         Please, don't share this link with anyone.""",
                 frontendProperties.getUrl(),
-                frontendProperties.getUserPasswordChangePath(),
+                frontendProperties.getRequestAccountDeletionPath(),
                 token.getToken()));
         emailMessageSender.sendMessage(mailMessage);
     }
@@ -42,7 +43,7 @@ public class PasswordChangeThroughEmailService implements TokenBasedVerification
     @Override
     public User validateTokenAndReturnCorrespondingUser(String token) throws InvalidTokenException {
         ConfirmationToken confirmationToken =
-                confirmationTokenService.validateToken(token, TokenType.PASSWORD_CHANGE_TOKEN);
+                confirmationTokenService.validateToken(token, TokenType.ACCOUNT_DELETION_TOKEN);
         User user = confirmationToken.getUser();
         confirmationTokenService.deleteToken(confirmationToken);
         return user;
@@ -50,6 +51,6 @@ public class PasswordChangeThroughEmailService implements TokenBasedVerification
 
     @Override
     public void deleteUserConfirmationTokenIfExists(User user) {
-        confirmationTokenService.deleteUserConfirmationTokenIfExists(user, TokenType.PASSWORD_CHANGE_TOKEN);
+        confirmationTokenService.deleteUserConfirmationTokenIfExists(user, TokenType.ACCOUNT_DELETION_TOKEN);
     }
 }

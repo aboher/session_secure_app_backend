@@ -39,4 +39,14 @@ public class UserController {
         User user = userDtoMapper.toEntity(userDto);
         userService.validateTokenAndChangePassword(token, user.getPassword());
     }
+
+    @PostMapping("/request-account-deletion")
+    public void requestAccountDeletion() {
+        userService.requestAccountDeletion();
+    }
+
+    @DeleteMapping("/delete-account")
+    public void deleteAccount(@RequestParam("token") String token) {
+        userService.validateTokenAndDeleteAccount(token);
+    }
 }

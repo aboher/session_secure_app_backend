@@ -2,6 +2,7 @@ package com.aboher.sessionsecureapp.service.impl;
 
 import com.aboher.sessionsecureapp.config.FrontendProperties;
 import com.aboher.sessionsecureapp.enums.TokenType;
+import com.aboher.sessionsecureapp.exception.InvalidTokenException;
 import com.aboher.sessionsecureapp.model.ConfirmationToken;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.service.MessageSender;
@@ -39,7 +40,7 @@ public class EmailAccountConfirmationService implements TokenBasedVerificationSe
     }
 
     @Override
-    public User validateTokenAndReturnCorrespondingUser(String token) {
+    public User validateTokenAndReturnCorrespondingUser(String token) throws InvalidTokenException {
         ConfirmationToken confirmationToken =
                 confirmationTokenService.validateToken(token, TokenType.EMAIL_CONFIRMATION_TOKEN);
         User user = confirmationToken.getUser();

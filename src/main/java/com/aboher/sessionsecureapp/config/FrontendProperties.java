@@ -12,4 +12,5 @@ public class FrontendProperties {
     private final String userEmailConfirmationHandlerPath;
     private final String userPasswordChangePath;
     private final String requestPasswordChangePath;
+    private final String requestAccountDeletionPath;
 }

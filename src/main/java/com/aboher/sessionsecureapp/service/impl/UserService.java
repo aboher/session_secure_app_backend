@@ -1,6 +1,7 @@
 package com.aboher.sessionsecureapp.service.impl;
 
 import com.aboher.sessionsecureapp.config.FrontendProperties;
+import com.aboher.sessionsecureapp.exception.InvalidTokenException;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.repository.UserRepository;
 import com.aboher.sessionsecureapp.service.MessageSender;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -21,7 +24,9 @@ public class UserService {
     private final MessageSender<SimpleMailMessage> emailMessageSender;
     private final TokenBasedVerificationService emailAccountConfirmationService;
     private final TokenBasedVerificationService passwordChangeThroughEmailService;
+    private final TokenBasedVerificationService accountDeletionThroughEmailService;
     private final FrontendProperties frontendProperties;
+    private final SessionService sessionService;
 
     public User createUser(User user) {
         userValidator.validate(user);
@@ -108,7 +113,7 @@ public class UserService {
         emailMessageSender.sendMessage(mail);
     }
 
-    public void validateTokenAndEnableUser(String confirmationToken) {
+    public void validateTokenAndEnableUser(String confirmationToken) throws InvalidTokenException {
         User user = emailAccountConfirmationService.validateTokenAndReturnCorrespondingUser(confirmationToken);
         enableUser(user);
     }
@@ -118,7 +123,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void validateTokenAndChangePassword(String token, String newPassword) {
+    public void validateTokenAndChangePassword(String token, String newPassword) throws InvalidTokenException {
         User user = passwordChangeThroughEmailService.validateTokenAndReturnCorrespondingUser(token);
         changeUserPassword(user, newPassword);
     }
@@ -128,5 +133,26 @@ public class UserService {
         userValidator.validate(user);
         encodePassword(user);
         userRepository.save(user);
+    }
+
+    public void requestAccountDeletion() {
+        User user = userRepository.findByEmail(sessionService.getEmail());
+        accountDeletionThroughEmailService.deleteUserConfirmationTokenIfExists(user);
+        accountDeletionThroughEmailService.sendMessageWithConfirmationToken(user);
+    }
+
+    public void validateTokenAndDeleteAccount(String token) {
+        User user = accountDeletionThroughEmailService.validateTokenAndReturnCorrespondingUser(token);
+        deleteAccount(user);
+    }
+
+    private void deleteAccount(User user) {
+        closeAllActiveSessions(user);
+        userRepository.delete(user);
+    }
+
+    private void closeAllActiveSessions(User user) {
+        Set<String> activeSessions = sessionService.getAllActiveSessionsIds(user.getEmail());
+        activeSessions.forEach(sessionService::invalidateSession);
     }
 }
