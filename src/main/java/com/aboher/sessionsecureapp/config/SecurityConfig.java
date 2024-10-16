@@ -79,8 +79,14 @@ public class SecurityConfig {
                                 "/users",
                                 "/login",
                                 "/logout",
-                                "/users/confirm-account",
-                                "/users/request-password-change",
+                                "/users/request-password-change"
+                        ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/users/confirm-account"
+                        ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.PATCH,
                                 "/users/password-change"
                         ).permitAll()
                         .anyRequest().authenticated())

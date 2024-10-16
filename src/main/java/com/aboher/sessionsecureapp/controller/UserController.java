@@ -24,7 +24,7 @@ public class UserController {
         return userDtoMapper.toDto(createdUser);
     }
 
-    @PostMapping("/confirm-account")
+    @GetMapping("/confirm-account")
     public void confirmUserAccount(@RequestParam("token") String confirmationToken) {
         userService.validateTokenAndEnableUser(confirmationToken);
     }
@@ -34,7 +34,7 @@ public class UserController {
         userService.requestPasswordChange(email);
     }
 
-    @PostMapping("/password-change")
+    @PatchMapping("/password-change")
     public void changePassword(@RequestParam("token") String token, @RequestBody UserDto userDto) {
         User user = userDtoMapper.toEntity(userDto);
         userService.validateTokenAndChangePassword(token, user.getPassword());
