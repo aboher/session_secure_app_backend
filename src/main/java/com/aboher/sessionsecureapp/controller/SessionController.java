@@ -31,32 +31,40 @@ public class SessionController {
         sessionService.setMaxInactiveInterval(interval);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("attributes")
     public Map<String, Object> getAttributes() {
         return sessionService.getAttributes();
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @GetMapping("attribute")
     public Object getAttribute(@RequestParam String name) {
         return sessionService.getAttribute(name);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PutMapping("attribute")
     public void setAttribute(@RequestParam String name, @RequestBody Object object) {
-        if ("SESSION_DETAILS".equals(name) || "SPRING_SECURITY_CONTEXT".equals(name)) {
+        if (canNotModifyAttribute(name)) {
             throw new InvalidAttributeException(
                     String.format("You are not allowed to modify '%s' attribute", name));
         }
         sessionService.setAttribute(name, object);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("attribute")
     public void deleteAttribute(@RequestParam String name) {
-        if ("SESSION_DETAILS".equals(name) || "SPRING_SECURITY_CONTEXT".equals(name)) {
+        if (canNotModifyAttribute(name)) {
             throw new InvalidAttributeException(
                     String.format("You are not allowed to delete '%s' attribute", name));
         }
         sessionService.removeAttribute(name);
+    }
+
+    private boolean canNotModifyAttribute(String attrName) {
+        return "SESSION_DETAILS".equals(attrName) || "SPRING_SECURITY_CONTEXT".equals(attrName);
     }
 
     @GetMapping("active-sessions-ids")
@@ -71,8 +79,8 @@ public class SessionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("emails-of-all-active-sessions")
-    public Set<String> getAllActiveSessionsPrincipalNames() {
-        return sessionService.getAllActiveSessionsPrincipalNames();
+    public Set<String> getPrincipalNamesOfAllTheUsersWithActiveSessions() {
+        return sessionService.getPrincipalNamesOfAllTheUsersWithActiveSessions();
     }
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -127,7 +127,7 @@ public class SessionService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<String> getAllActiveSessionsPrincipalNames() {
+    public Set<String> getPrincipalNamesOfAllTheUsersWithActiveSessions() {
         return redisService.getPrincipalNamesOfAllTheUsersWithActiveSessions();
     }
 
@@ -148,8 +148,6 @@ public class SessionService {
         SecurityContext securityContext = session.getAttribute("SPRING_SECURITY_CONTEXT");
         Authentication authentication = securityContext.getAuthentication();
         String sessionEmail = authentication.getName();
-
-//        String sessionEmail = session.getAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME);
         return currentEmail.equals(sessionEmail);
     }
 

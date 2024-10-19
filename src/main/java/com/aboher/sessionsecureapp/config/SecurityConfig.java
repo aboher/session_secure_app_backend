@@ -40,6 +40,9 @@ import java.util.function.Supplier;
 public class SecurityConfig {
 
     @Autowired
+    FrontendProperties frontendProperties;
+
+    @Autowired
     DataSource dataSource;
 
     @Bean
@@ -55,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of(frontendProperties.getUrl()));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

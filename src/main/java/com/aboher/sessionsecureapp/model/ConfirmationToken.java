@@ -53,5 +53,4 @@ public class ConfirmationToken {
     public boolean hasTokenExpired() {
         return new Date().after(this.expiryDate);
     }
-
 }

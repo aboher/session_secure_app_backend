@@ -56,6 +56,11 @@ public class UserService {
         return saveNewUserInDatabase(user);
     }
 
+    public void validateTokenAndEnableUser(String confirmationToken) throws InvalidTokenException {
+        User user = emailAccountConfirmationService.validateTokenAndReturnCorrespondingUser(confirmationToken);
+        enableUser(user);
+    }
+
     private void notifyUserHeAlreadyHasAConfirmedAccount(User user) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
@@ -93,14 +98,14 @@ public class UserService {
             return;
         }
         if (!user.isEnabled()) {
-            notifyUserHeDoNotHaveAnAccount(user);
+            notifyUserHeDoesNotHaveAnAccount(user);
             return;
         }
         passwordChangeThroughEmailService.deleteConfirmationTokenIfExists(user);
         passwordChangeThroughEmailService.sendMessageWithConfirmationToken(user);
     }
 
-    private void notifyUserHeDoNotHaveAnAccount(User user) {
+    private void notifyUserHeDoesNotHaveAnAccount(User user) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setSubject("Account required");
@@ -110,11 +115,6 @@ public class UserService {
                                 
                 If it wasn't you trying to change your password, just ignore this email.""");
         emailMessageSender.sendMessage(mail);
-    }
-
-    public void validateTokenAndEnableUser(String confirmationToken) throws InvalidTokenException {
-        User user = emailAccountConfirmationService.validateTokenAndReturnCorrespondingUser(confirmationToken);
-        enableUser(user);
     }
 
     private void enableUser(User user) {
@@ -140,7 +140,7 @@ public class UserService {
         accountDeletionThroughEmailService.sendMessageWithConfirmationToken(user);
     }
 
-    public void validateTokenAndDeleteAccount(String token) {
+    public void validateTokenAndDeleteAccount(String token) throws InvalidTokenException {
         User user = accountDeletionThroughEmailService.validateTokenAndReturnCorrespondingUser(token);
         deleteAccount(user);
     }
