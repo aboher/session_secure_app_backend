@@ -3,7 +3,7 @@ package com.aboher.sessionsecureapp.controller;
 import com.aboher.sessionsecureapp.dto.UserDto;
 import com.aboher.sessionsecureapp.mapper.Mapper;
 import com.aboher.sessionsecureapp.model.User;
-import com.aboher.sessionsecureapp.service.impl.UserService;
+import com.aboher.sessionsecureapp.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

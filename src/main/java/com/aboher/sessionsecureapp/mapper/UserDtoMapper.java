@@ -1,7 +1,6 @@
-package com.aboher.sessionsecureapp.mapper.impl;
+package com.aboher.sessionsecureapp.mapper;
 
 import com.aboher.sessionsecureapp.dto.UserDto;
-import com.aboher.sessionsecureapp.mapper.Mapper;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.model.UserInfo;
 import lombok.Builder;

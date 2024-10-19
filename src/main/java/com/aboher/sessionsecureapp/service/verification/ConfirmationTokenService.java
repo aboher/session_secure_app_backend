@@ -1,4 +1,4 @@
-package com.aboher.sessionsecureapp.service.impl;
+package com.aboher.sessionsecureapp.service.verification;
 
 import com.aboher.sessionsecureapp.enums.TokenType;
 import com.aboher.sessionsecureapp.exception.InvalidTokenException;

@@ -1,11 +1,10 @@
-package com.aboher.sessionsecureapp.service.impl;
+package com.aboher.sessionsecureapp.service;
 
 import com.aboher.sessionsecureapp.config.FrontendProperties;
 import com.aboher.sessionsecureapp.exception.InvalidTokenException;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.repository.UserRepository;
-import com.aboher.sessionsecureapp.service.MessageSender;
-import com.aboher.sessionsecureapp.service.TokenBasedVerificationService;
+import com.aboher.sessionsecureapp.service.verification.TokenBasedVerificationService;
 import com.aboher.sessionsecureapp.util.EntityValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -47,7 +46,7 @@ public class UserService {
             return user;
         }
 
-        emailAccountConfirmationService.deleteUserConfirmationTokenIfExists(savedUser);
+        emailAccountConfirmationService.deleteConfirmationTokenIfExists(savedUser);
         user.setId(savedUser.getId());
              /*Here, at this point, I'm replacing the unverified user in the database
              with the new one. I do this because someone may have used this email by
@@ -97,7 +96,7 @@ public class UserService {
             notifyUserHeDoNotHaveAnAccount(user);
             return;
         }
-        passwordChangeThroughEmailService.deleteUserConfirmationTokenIfExists(user);
+        passwordChangeThroughEmailService.deleteConfirmationTokenIfExists(user);
         passwordChangeThroughEmailService.sendMessageWithConfirmationToken(user);
     }
 
@@ -137,7 +136,7 @@ public class UserService {
 
     public void requestAccountDeletion() {
         User user = userRepository.findByEmail(sessionService.getEmail());
-        accountDeletionThroughEmailService.deleteUserConfirmationTokenIfExists(user);
+        accountDeletionThroughEmailService.deleteConfirmationTokenIfExists(user);
         accountDeletionThroughEmailService.sendMessageWithConfirmationToken(user);
     }
 

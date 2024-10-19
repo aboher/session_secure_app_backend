@@ -1,4 +1,4 @@
-package com.aboher.sessionsecureapp.service.impl;
+package com.aboher.sessionsecureapp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

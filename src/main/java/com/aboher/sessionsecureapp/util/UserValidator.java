@@ -1,9 +1,8 @@
-package com.aboher.sessionsecureapp.util.impl;
+package com.aboher.sessionsecureapp.util;
 
 import com.aboher.sessionsecureapp.exception.InvalidFormFieldException;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.repository.UserRepository;
-import com.aboher.sessionsecureapp.util.EntityValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

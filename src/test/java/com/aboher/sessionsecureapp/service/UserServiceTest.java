@@ -4,7 +4,6 @@ import com.aboher.sessionsecureapp.enums.Role;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.model.UserInfo;
 import com.aboher.sessionsecureapp.repository.UserRepository;
-import com.aboher.sessionsecureapp.service.impl.UserService;
 import com.aboher.sessionsecureapp.util.EntityValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

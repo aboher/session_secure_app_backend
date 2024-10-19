@@ -1,6 +1,5 @@
-package com.aboher.sessionsecureapp.service.impl;
+package com.aboher.sessionsecureapp.service;
 
-import com.aboher.sessionsecureapp.service.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

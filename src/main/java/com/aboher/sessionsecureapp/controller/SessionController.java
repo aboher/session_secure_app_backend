@@ -2,7 +2,7 @@ package com.aboher.sessionsecureapp.controller;
 
 import com.aboher.sessionsecureapp.dto.SessionInfo;
 import com.aboher.sessionsecureapp.exception.InvalidAttributeException;
-import com.aboher.sessionsecureapp.service.impl.SessionService;
+import com.aboher.sessionsecureapp.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

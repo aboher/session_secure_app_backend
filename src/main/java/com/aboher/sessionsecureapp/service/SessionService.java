@@ -1,4 +1,4 @@
-package com.aboher.sessionsecureapp.service.impl;
+package com.aboher.sessionsecureapp.service;
 
 import com.aboher.sessionsecureapp.dto.SessionInfo;
 import com.aboher.sessionsecureapp.enums.Role;

@@ -3,7 +3,7 @@ package com.aboher.sessionsecureapp.controller;
 import com.aboher.sessionsecureapp.dto.UserDto;
 import com.aboher.sessionsecureapp.mapper.Mapper;
 import com.aboher.sessionsecureapp.model.User;
-import com.aboher.sessionsecureapp.service.impl.UserService;
+import com.aboher.sessionsecureapp.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

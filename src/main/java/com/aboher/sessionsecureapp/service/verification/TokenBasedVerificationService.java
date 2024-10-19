@@ -1,4 +1,4 @@
-package com.aboher.sessionsecureapp.service;
+package com.aboher.sessionsecureapp.service.verification;
 
 import com.aboher.sessionsecureapp.exception.InvalidTokenException;
 import com.aboher.sessionsecureapp.model.User;
@@ -9,5 +9,5 @@ public interface TokenBasedVerificationService {
 
     User validateTokenAndReturnCorrespondingUser(String token) throws InvalidTokenException;
 
-    void deleteUserConfirmationTokenIfExists(User user);
+    void deleteConfirmationTokenIfExists(User user);
 }

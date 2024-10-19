@@ -4,7 +4,6 @@ import com.aboher.sessionsecureapp.exception.InvalidFormFieldException;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.model.UserInfo;
 import com.aboher.sessionsecureapp.repository.UserRepository;
-import com.aboher.sessionsecureapp.util.impl.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

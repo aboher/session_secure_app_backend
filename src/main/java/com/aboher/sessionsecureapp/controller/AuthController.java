@@ -3,7 +3,7 @@ package com.aboher.sessionsecureapp.controller;
 import com.aboher.sessionsecureapp.dto.AuthInfo;
 import com.aboher.sessionsecureapp.dto.LoginRequest;
 import com.aboher.sessionsecureapp.service.AuthService;
-import com.aboher.sessionsecureapp.service.impl.SessionService;
+import com.aboher.sessionsecureapp.service.SessionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
