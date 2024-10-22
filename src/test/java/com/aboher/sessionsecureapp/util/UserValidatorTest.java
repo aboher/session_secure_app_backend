@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserValidatorTest {
@@ -37,12 +36,8 @@ class UserValidatorTest {
     void givenValidUser_whenValidate_thenValidationCompletesCorrectly() {
         // Given the valid user
 
-        // When
-        when(userRepository.existsByEmail(validUser.getEmail())).thenReturn(false);
-
         // Then
         userValidator.validate(validUser);
-        verify(userRepository, times(1)).existsByEmail(validUser.getEmail());
     }
 
     @Test
@@ -53,16 +48,12 @@ class UserValidatorTest {
                 .email(validUser.getEmail())
                 .password(validUser.getPassword()).build();
 
-        // When
-        when(userRepository.existsByEmail(invalidUser.getEmail())).thenReturn(false);
-
         // Then
         assertThatThrownBy(() -> userValidator.validate(invalidUser))
                 .isInstanceOf(InvalidFormFieldException.class)
                 .hasMessageContaining(String.format("Invalid first name '%s'. First " +
                                                     "name can not have digits, and must be between 1 and 24 " +
                                                     "characters long", invalidUser.getUserInfo().getFirstName()));
-        verify(userRepository, times(1)).existsByEmail(invalidUser.getEmail());
     }
 
     @Test
@@ -73,16 +64,12 @@ class UserValidatorTest {
                 .email(validUser.getEmail())
                 .password(validUser.getPassword()).build();
 
-        // When
-        when(userRepository.existsByEmail(invalidUser.getEmail())).thenReturn(false);
-
         // Then
         assertThatThrownBy(() -> userValidator.validate(invalidUser))
                 .isInstanceOf(InvalidFormFieldException.class)
                 .hasMessageContaining(String.format("Invalid last name '%s'. Last " +
                                                     "name can not have digits, and must be between 1 and 24 " +
                                                     "characters long", invalidUser.getUserInfo().getLastName()));
-        verify(userRepository, times(1)).existsByEmail(invalidUser.getEmail());
     }
 
     @Test
@@ -93,15 +80,11 @@ class UserValidatorTest {
                 .email("email_with_domain_missing@sdf")
                 .password(validUser.getPassword()).build();
 
-        // When
-        when(userRepository.existsByEmail(invalidUser.getEmail())).thenReturn(false);
-
         // Then
         assertThatThrownBy(() -> userValidator.validate(invalidUser))
                 .isInstanceOf(InvalidFormFieldException.class)
                 .hasMessageContaining(String.format("Email '%s it not valid",
                         invalidUser.getEmail()));
-        verify(userRepository, times(1)).existsByEmail(invalidUser.getEmail());
     }
 
     @Test
@@ -112,9 +95,6 @@ class UserValidatorTest {
                 .email(validUser.getEmail())
                 .password("some_easy_to_remember_password").build();
 
-        // When
-        when(userRepository.existsByEmail(invalidUser.getEmail())).thenReturn(false);
-
         // Then
         assertThatThrownBy(() -> userValidator.validate(invalidUser))
                 .isInstanceOf(InvalidFormFieldException.class)
@@ -122,6 +102,5 @@ class UserValidatorTest {
                                       "between 8 to 24 characters. Must include uppercase and " +
                                       "lowercase letters, a number and a special character. Allowed " +
                                       "special Characters: !@#$%");
-        verify(userRepository, times(1)).existsByEmail(invalidUser.getEmail());
     }
 }

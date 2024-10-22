@@ -7,25 +7,27 @@ import com.aboher.sessionsecureapp.repository.UserRepository;
 import com.aboher.sessionsecureapp.service.verification.TokenBasedVerificationService;
 import com.aboher.sessionsecureapp.util.EntityValidator;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@AllArgsConstructor
 @Service
+@Data
+@AllArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final EntityValidator<User> userValidator;
-    private final MessageSender<SimpleMailMessage> emailMessageSender;
-    private final TokenBasedVerificationService emailAccountConfirmationService;
-    private final TokenBasedVerificationService passwordChangeThroughEmailService;
-    private final TokenBasedVerificationService accountDeletionThroughEmailService;
-    private final FrontendProperties frontendProperties;
-    private final SessionService sessionService;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private EntityValidator<User> userValidator;
+    private MessageSender<SimpleMailMessage> emailMessageSender;
+    private TokenBasedVerificationService emailAccountConfirmationService;
+    private TokenBasedVerificationService passwordChangeThroughEmailService;
+    private TokenBasedVerificationService accountDeletionThroughEmailService;
+    private FrontendProperties frontendProperties;
+    private SessionService sessionService;
 
     public User createUser(User user) {
         userValidator.validate(user);
