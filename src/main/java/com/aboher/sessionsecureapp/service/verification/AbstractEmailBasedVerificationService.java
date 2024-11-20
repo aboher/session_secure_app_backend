@@ -6,10 +6,15 @@ import com.aboher.sessionsecureapp.model.ConfirmationToken;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.service.MessageSender;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
 @RequiredArgsConstructor
 public abstract class AbstractEmailBasedVerificationService implements TokenBasedVerificationService {
+
+    @Value("${spring.mail.username}")
+    private String smtpEmail;
+
     private final ConfirmationTokenService confirmationTokenService;
     private final MessageSender<SimpleMailMessage> emailMessageSender;
 
@@ -26,6 +31,7 @@ public abstract class AbstractEmailBasedVerificationService implements TokenBase
         ConfirmationToken token = confirmationTokenService.createToken(user, getTokenType(), getExpirationTimePeriodInMinutes());
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(smtpEmail);
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject(getVerificationEmailSubject());
         mailMessage.setText(getVerificationEmailText(token.getToken()));
