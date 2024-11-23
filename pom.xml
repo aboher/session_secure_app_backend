@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.aboher</groupId>
 	<artifactId>session-secure-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>session-secure-app</name>
 	<description>Session secured app using Spring Boot, Spring Security and Spring Session</description>
 	<properties>

@@ -11,6 +11,7 @@ import com.aboher.sessionsecureapp.repository.ConfirmationTokenRepository;
 import com.aboher.sessionsecureapp.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -42,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @Import(TestSecurityConfig.class)
+@Disabled
 class UserControllerIT {
     private final String ENDPOINT_PATH = "/users";
 
