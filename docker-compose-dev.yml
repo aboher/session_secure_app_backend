@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: session_secure_app
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./src/main/resources/db-init-scripts:/docker-entrypoint-initdb.d
+  redis:
+    container_name: redis_server
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: [ "redis-server", "--requirepass", "${REDIS_PASSWORD}" ]
+    restart: always
+    volumes:
+      - redis_volume:/data
+
+volumes:
+  mysql_data:
+    name: mysql_data
+  redis_volume:
+    name: redis_data
