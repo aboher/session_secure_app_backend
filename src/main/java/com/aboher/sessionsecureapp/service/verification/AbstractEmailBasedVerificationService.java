@@ -6,7 +6,6 @@ import com.aboher.sessionsecureapp.model.ConfirmationToken;
 import com.aboher.sessionsecureapp.model.User;
 import com.aboher.sessionsecureapp.service.MessageSender;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
 @RequiredArgsConstructor
