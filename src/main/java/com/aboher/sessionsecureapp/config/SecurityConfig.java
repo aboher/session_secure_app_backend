@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,6 +30,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.sql.DataSource;
@@ -40,6 +42,12 @@ import java.util.function.Supplier;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
+    @Value("${backend.url}")
+    private String backendUrl;
 
     @Autowired
     FrontendProperties frontendProperties;
@@ -105,10 +113,20 @@ public class SecurityConfig {
     }
 
     @Bean
+    public ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
+    }
+
+    @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-        serializer.setSameSite("None");      // this enables cross-site usage
-        serializer.setUseSecureCookie(true); // this makes the use of https mandatory
+        if (isProductionProfileActive()) {
+            serializer.setSameSite("None");      // this enables cross-site usage
+            serializer.setUseSecureCookie(true); // this makes the use of https mandatory
+            serializer.setDomainName(backendUrl); // This sets the domain of the cookie
+            // Setting the domain of the cookie it's important because otherwise the
+            // cookie is considered a third party cookie and it's blocked
+        }
         return serializer;
     }
 
@@ -116,10 +134,19 @@ public class SecurityConfig {
     public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
         // It can't be httpOnly because we need to handle it with JS to put it in the header
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        repository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer
-                .secure(true)       // this makes the use of https mandatory
-                .sameSite("None")); // this enables cross-site usage
+        if (isProductionProfileActive()) {
+            repository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer
+                    .secure(true)       // this makes the use of https mandatory
+                    .sameSite("None") // this enables cross-site usage
+                    .domain(backendUrl)); // This sets the domain of the cookie
+            // Setting the domain of the cookie it's important because otherwise the
+            // cookie is considered a third party cookie and it's blocked
+        }
         return repository;
+    }
+
+    private boolean isProductionProfileActive() {
+        return "prod".equals(activeProfile);
     }
 
     @Bean
