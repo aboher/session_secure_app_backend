@@ -1,35 +1,26 @@
 package com.aboher.sessionsecureapp.exception;
 
+import com.aboher.sessionsecureapp.dto.ErrorMessage;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@ControllerAdvice
+@RestControllerAdvice
 public class UserExceptionHandler {
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidFormFieldException.class, InvalidSessionException.class, InvalidAttributeException.class})
-    public Map<String, String> handleInvalidValueException(RuntimeException ex) {
-        return getErrorMapFromErrorMessage(ex.getMessage());
+    @ExceptionHandler({
+            InvalidFormFieldException.class,
+            InvalidSessionException.class,
+            InvalidAttributeException.class})
+    public ErrorMessage handleInvalidValueException(RuntimeException ex) {
+        return new ErrorMessage(ex.getMessage());
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidTokenException.class)
-    public Map<String, String> handleInvalidTokenException(RuntimeException ex) {
-        return getErrorMapFromErrorMessage(ex.getMessage());
+    public ErrorMessage handleInvalidTokenException(RuntimeException ex) {
+        return new ErrorMessage(ex.getMessage());
     }
-
-    private Map<String, String> getErrorMapFromErrorMessage(String errorMessage) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("errorMessage", errorMessage);
-        return errorMap;
-    }
-
 }

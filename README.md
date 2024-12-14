@@ -77,6 +77,11 @@ discussion: [Account registration best practice when an account with the usernam
 >
 > "Return a consistent message for both existent and non-existent accounts"
 
+## Swagger UI Documentation
+
+You can find the complete documentation on the
+following [link](https://vps-4547216-x.dattaweb.com/swagger-ui/index.html).
+
 ## Diagrams of the Modules Used
 
 To help you understand how the application is structured, here is a simplified
