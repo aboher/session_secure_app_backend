@@ -43,7 +43,8 @@ public class UserController {
                     * **email**: Must be a valid email
                     * **password:** Must have between 8 to 24 characters. Must include an uppercase letter. Must include a lowercase letter. Must include a number. Must include a special character. Allowed special Characters are: ! @ # $ %
                     * **roles:** Must be an array of all the roles assigned, the possible values are: "ROLE_USER", "ROLE_MODERATOR", "ROLE_ADMIN"
-                    """
+                    """,
+            security = @SecurityRequirement(name = "csrf-token")
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -75,7 +76,8 @@ public class UserController {
                     the password to be change you need to confirm the operation at
                     [/users/password-change](#/user-controller/password-change-operation-id)
                     using the token received.
-                    """
+                    """,
+            security = @SecurityRequirement(name = "csrf-token")
     )
     @PostMapping("/request-password-change")
     public void requestPasswordChange(@RequestParam("email") String email) {
@@ -100,7 +102,8 @@ public class UserController {
                     parameter must be the one received by email. To get one, you
                     must make a request at
                     [/users/request-password-change](#/user-controller/request-password-change-operation-id)
-                    """
+                    """,
+            security = @SecurityRequirement(name = "csrf-token")
     )
     @PatchMapping("/password-change")
     public void changePassword(@RequestParam("token") String token, @RequestBody UserDto userDto) {
@@ -111,12 +114,17 @@ public class UserController {
     @Operation(
             operationId = "request-account-deletion-operation-id",
             description = """
-                    Sends a link with a token query parameter to delete your
-                    account. For the account to be deleted you need to confirm
-                    the operation at
+                    Sends an email to the owner of the account, which
+                    must be authenticated, with a link with a token query parameter
+                    to delete his account. For the account to be deleted you
+                    need to confirm the operation at
                     [delete-account](#/user-controller/delete-account-operation-id)
                     using the token received.
-                    """
+                    """,
+            security = {
+                    @SecurityRequirement(name = "session-cookie"),
+                    @SecurityRequirement(name = "csrf-token")
+            }
     )
     @PostMapping("/request-account-deletion")
     public void requestAccountDeletion() {
@@ -134,7 +142,10 @@ public class UserController {
                     must make a request at
                     [/users/request-account-deletion](#/user-controller/request-account-deletion-operation-id)
                     """,
-            security = @SecurityRequirement(name = "SESSION")
+            security = {
+                    @SecurityRequirement(name = "session-cookie"),
+                    @SecurityRequirement(name = "csrf-token")
+            }
     )
     @DeleteMapping("/delete-account")
     public void deleteAccount(@RequestParam("token") String token) {
