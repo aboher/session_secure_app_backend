@@ -1,0 +1,653 @@
+{
+	"info": {
+		"_postman_id": "7be36ec9-97a8-4d5a-8d27-081111298b29",
+		"name": "session-secure-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21713614"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var xsrfCookie = pm.cookies.get(\"XSRF-TOKEN\");\r",
+							"pm.environment.set(\"xsrf-token\", xsrfCookie);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrf-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"moderator@mail.com\",\r\n    \"password\": \"moderator\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var xsrfCookie = pm.cookies.get(\"XSRF-TOKEN\");\r",
+							"pm.environment.set(\"xsrf-token\", xsrfCookie);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrf-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authentication info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/auth-info",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth-info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign Up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var xsrfCookie = pm.cookies.get(\"XSRF-TOKEN\");\r",
+							"pm.environment.set(\"xsrf-token\", xsrfCookie);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrf-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"asd\",\r\n    \"lastName\": \"asd\",\r\n    \"email\": \"atilioboher@gmail.com\",\r\n    \"password\": \"Password1!\",\r\n    \"roles\": [\"ROLE_USER\", \"ROLE_MODERATOR\", \"ROLE_ADMIN\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "confirm account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var xsrfCookie = postman.getResponseCookie(\"XSRF-TOKEN\");\r",
+							"postman.setEnvironmentVariable(\"xsrf-token\", xsrfCookie.value);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrf-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/users/confirm-account?token=d288de8a-00d9-4f95-8ab5-22404f7ed26e",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"confirm-account"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "d288de8a-00d9-4f95-8ab5-22404f7ed26e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "request password change",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "63e1e4d3-7554-4045-a41b-ad0a527d75d2",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/users/request-password-change?email=atilioboher@gmail.com",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"request-password-change"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "atilioboher@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "confirm password change",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "4c6755ad-8083-40cd-a62d-987742f0f7c9",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"sdfsdf\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/password-change?token=26cfcf98-3afa-41cf-b011-dfcbedc5f393",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"password-change"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "26cfcf98-3afa-41cf-b011-dfcbedc5f393"
+						}
+					]
+				},
+				"description": "This endpoint allows users to change their password by sending a POST request to the specified URL with the token as a query parameter. The request should include a JSON payload in the raw request body type, containing the new password.\n\n### Request Body\n\n- `password` (string, required): The new password for the user's account.\n    \n\n### Response\n\nThe endpoint returns a 400 status code with a JSON response in the content type \"application/json\". The response body includes an `errorMessage` field, which provides information about any error that occurred during the password change process."
+			},
+			"response": []
+		},
+		{
+			"name": "get session info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "5719a385-c309-49f4-917b-611ac549bed0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/session/info?id=4e490f91-f172-43ad-a813-7600449974be",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"info"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "4e490f91-f172-43ad-a813-7600449974be"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set max inactive interval",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "5719a385-c309-49f4-917b-611ac549bed0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/session/max-inactive-interval?interval=60",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"max-inactive-interval"
+					],
+					"query": [
+						{
+							"key": "interval",
+							"value": "60"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get active sessions id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/session/active-sessions-ids",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"active-sessions-ids"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete session by id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "0a2bc1e9-c2b6-4d88-a40b-8ce64745c869",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/session/delete-session?id=ef7a0d19-6acd-4471-995e-dcf7609c8f94",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"delete-session"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "ef7a0d19-6acd-4471-995e-dcf7609c8f94"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get emails of all active sessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/session/emails-of-all-active-sessions",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"emails-of-all-active-sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get sessions ids from a specific user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/session/active-sessions-ids/user@mail.com",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"active-sessions-ids",
+						"user@mail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all attributes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/session/attributes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"attributes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get attribute by name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/session/attribute?name=new-attribute",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"attribute"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "new-attribute"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create/update attribute",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "4c6755ad-8083-40cd-a62d-987742f0f7c9",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"someAttributeName\": \"someAttributeValue\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/session/attribute?name=SESSION_DETAILS",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"attribute"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "SESSION_DETAILS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete attribute",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "4c6755ad-8083-40cd-a62d-987742f0f7c9",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/session/attribute?name=SPRING_SECURITY_CONTEXT",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"session",
+						"attribute"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "SPRING_SECURITY_CONTEXT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request to delete account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "7016bc07-de9d-4d76-b024-8f2f4eff08a8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/users/request-account-deletion",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"request-account-deletion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete account",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "dc4709f1-4e80-4900-a02a-9a836020c368",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/users/delete-account?token=f52c8b52-25f3-4044-beec-070e2ece922b",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"delete-account"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "f52c8b52-25f3-4044-beec-070e2ece922b"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://session-secure-app-frontend.pages.dev/api-proxy",
+			"type": "string"
+		}
+	]
+}
