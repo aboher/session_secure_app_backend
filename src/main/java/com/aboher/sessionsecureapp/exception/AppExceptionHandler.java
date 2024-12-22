@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class UserExceptionHandler {
+public class AppExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
@@ -19,7 +19,10 @@ public class UserExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(InvalidTokenException.class)
+    @ExceptionHandler({
+            InvalidTokenException.class,
+            InvalidCredentialsException.class
+    })
     public ErrorMessage handleInvalidTokenException(RuntimeException ex) {
         return new ErrorMessage(ex.getMessage());
     }
